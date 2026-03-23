@@ -1,0 +1,7 @@
+{
+  "name": "claude-skills",
+  "description": "Custom Claude Code commands for PR review workflows",
+  "author": {
+    "name": "Saturday Morning Productions Inc."
+  }
+}
