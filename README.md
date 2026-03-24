@@ -52,3 +52,22 @@ Fixes, addresses, or responds to a GitHub PR review comment. Given a review comm
 ```
 
 You can also describe what you want naturally — e.g., "fix this PR review comment" and paste the URL.
+
+### smp-generate-changelog
+
+Creates a standalone bash script (`scripts/generate-changelog.sh`) that generates a `CHANGELOG.md` from GitHub releases. The script can be run independently without Claude.
+
+**Usage:**
+
+```
+/smp-generate-changelog
+```
+
+Once the script is created, you can run it directly:
+
+```bash
+./scripts/generate-changelog.sh                    # Writes to CHANGELOG.md
+./scripts/generate-changelog.sh docs/CHANGES.md    # Custom output path
+```
+
+**Script requirements:** [GitHub CLI (`gh`)](https://cli.github.com/) installed and authenticated.

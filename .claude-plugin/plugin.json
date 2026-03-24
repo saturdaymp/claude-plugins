@@ -1,7 +1,7 @@
 {
   "name": "claude-skills",
-  "version": "1.0.0",
-  "description": "Custom Claude Code skills for PR review workflows",
+  "version": "1.1.0",
+  "description": "Custom Claude Code skills that SaturdayMP finds useful and you might too.",
   "author": {
     "name": "Saturday Morning Productions Inc."
   }
