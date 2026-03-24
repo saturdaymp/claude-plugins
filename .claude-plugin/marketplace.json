@@ -7,7 +7,7 @@
   },
   "plugins": [
     {
-      "name": "saturdaymp-apply-github-pr-feedback",
+      "name": "smp-apply-github-pr-feedback",
       "description": "Validate and apply GitHub PR feedback.",
       "category": "development",
       "source": "./plugins/smp-github",
