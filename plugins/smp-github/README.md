@@ -1,5 +1,11 @@
 # smp-apply-github-pr-feedback
 
+**Install:**
+
+```
+/plugin install smp-apply-github-pr-feedback@saturdaymp/claude-plugins
+```
+
 Fixes, addresses, or responds to a GitHub PR review comment. Given a review comment URL, it will:
 
 1. Fetch the comment and its thread
