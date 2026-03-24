@@ -66,8 +66,22 @@ Creates a standalone bash script (`scripts/generate-changelog.sh`) that generate
 Once the script is created, you can run it directly:
 
 ```bash
-./scripts/generate-changelog.sh                    # Writes to CHANGELOG.md
+./scripts/generate-changelog.sh                    # Writes to CHANGELOG.md in repo root
 ./scripts/generate-changelog.sh docs/CHANGES.md    # Custom output path
 ```
 
-**Script requirements:** [GitHub CLI (`gh`)](https://cli.github.com/) installed and authenticated.
+**What the script does:**
+
+1. Verifies that `gh` is installed and authenticated
+2. Detects the GitHub repository from the current git working directory
+3. Fetches all published (non-draft) releases, sorted by date (newest first)
+4. Generates a formatted Markdown changelog with version headings, dates, and release notes
+5. Includes link references to each release on GitHub
+
+Pre-releases are included and marked with a `(Pre-release)` label in the heading.
+
+**Script requirements:**
+
+- Must be run from inside a git repository that has a GitHub remote
+- [GitHub CLI (`gh`)](https://cli.github.com/) installed and authenticated
+- `jq` (bundled with `gh`)
