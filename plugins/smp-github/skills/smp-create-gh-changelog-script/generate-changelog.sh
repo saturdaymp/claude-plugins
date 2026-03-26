@@ -22,6 +22,10 @@ set -euo pipefail
 
 # --- Configuration ---
 OUTPUT_FILE="${1:-CHANGELOG.md}"
+OUTPUT_DIR="$(dirname "$OUTPUT_FILE")"
+if [[ "$OUTPUT_DIR" != "." ]]; then
+  mkdir -p "$OUTPUT_DIR"
+fi
 
 # --- Preflight checks ---
 if ! command -v gh &> /dev/null; then
