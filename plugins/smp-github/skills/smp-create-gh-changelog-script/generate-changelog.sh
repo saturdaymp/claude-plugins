@@ -94,7 +94,7 @@ echo "Found $RELEASE_COUNT release(s) for $REPO"
     echo ""
 
     if [[ -n "$BODY" ]]; then
-      echo "$BODY"
+      printf '%s\n' "$BODY"
       echo ""
     fi
 
