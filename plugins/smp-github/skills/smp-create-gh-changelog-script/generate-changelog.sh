@@ -47,14 +47,14 @@ if [[ -z "$REPO" ]]; then
 fi
 
 # --- Fetch releases ---
-RELEASES=$(gh release list --repo "$REPO" --limit 1000 --json tagName,publishedAt,isDraft,isPrerelease --jq '[.[] | select(.isDraft == false)] | sort_by(.publishedAt) | reverse')
+RELEASE_TAGS=$(gh release list --repo "$REPO" --limit 1000 --json tagName,publishedAt,isDraft --jq '[.[] | select(.isDraft == false)] | sort_by(.publishedAt) | reverse | .[].tagName')
 
-RELEASE_COUNT=$(echo "$RELEASES" | jq 'length')
-if [[ "$RELEASE_COUNT" -eq 0 ]]; then
+if [[ -z "$RELEASE_TAGS" ]]; then
   echo "No published releases found for $REPO."
   exit 0
 fi
 
+RELEASE_COUNT=$(echo "$RELEASE_TAGS" | wc -l | tr -d ' ')
 echo "Found $RELEASE_COUNT release(s) for $REPO"
 
 # --- Build changelog ---
@@ -68,16 +68,12 @@ echo "Found $RELEASE_COUNT release(s) for $REPO"
   # Collect link references
   LINK_REFS=""
 
-  for i in $(seq 0 $((RELEASE_COUNT - 1))); do
-    TAG=$(echo "$RELEASES" | jq -r ".[$i].tagName")
-    IS_PRERELEASE=$(echo "$RELEASES" | jq -r ".[$i].isPrerelease")
-
-    # Fetch full release details
-    RELEASE_DETAIL=$(gh release view "$TAG" --repo "$REPO" --json tagName,name,body,publishedAt,isPrerelease)
-
-    NAME=$(echo "$RELEASE_DETAIL" | jq -r '.name // empty')
-    BODY=$(echo "$RELEASE_DETAIL" | jq -r '.body // empty')
-    PUBLISHED=$(echo "$RELEASE_DETAIL" | jq -r '.publishedAt')
+  while IFS= read -r TAG; do
+    # Fetch full release details using gh --jq (no external jq needed)
+    NAME=$(gh release view "$TAG" --repo "$REPO" --json name --jq '.name // empty')
+    BODY=$(gh release view "$TAG" --repo "$REPO" --json body --jq '.body // empty')
+    PUBLISHED=$(gh release view "$TAG" --repo "$REPO" --json publishedAt --jq '.publishedAt')
+    IS_PRERELEASE=$(gh release view "$TAG" --repo "$REPO" --json isPrerelease --jq '.isPrerelease')
 
     # Format the date as YYYY-MM-DD
     DATE=$(date -jf "%Y-%m-%dT%H:%M:%SZ" "$PUBLISHED" "+%Y-%m-%d" 2>/dev/null || echo "$PUBLISHED" | cut -c1-10)
@@ -102,7 +98,7 @@ echo "Found $RELEASE_COUNT release(s) for $REPO"
     # Collect link reference
     LINK_REFS="${LINK_REFS}[$VERSION]: https://github.com/$REPO/releases/tag/$TAG
 "
-  done
+  done <<< "$RELEASE_TAGS"
 
   # Write link references
   echo "$LINK_REFS"
