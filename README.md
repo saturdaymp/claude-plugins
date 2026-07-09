@@ -54,9 +54,9 @@ Don't forget to restart Claude Code or try reloading the plugins:
 
 ### Plugins Available
 
-| Plugin | Description |
-|--------|-------------|
-| [smp-github](plugins/smp-github/) | GitHub skills — PR review feedback workflow |
+| Plugin | Channels | Description |
+|--------|----------|-------------|
+| [smp-github](plugins/smp-github/) | `smp-github`, `smp-github-latest` | GitHub skills — PR review feedback workflow |
 
 ## Versioning and Releases
 
