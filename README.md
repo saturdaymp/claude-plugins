@@ -77,7 +77,7 @@ Run the [Release workflow](.github/workflows/release.yml) from the GitHub Action
 1. Calculates the next version with GitVersion.
 2. Tags `main` with `vX.Y.Z` and creates a GitHub release with generated notes.
 3. Points the stable channel entries in `marketplace.json` at the new tag.
-4. Regenerates `CHANGELOG.md` and commits both files to `main` as `Release vX.Y.Z`.
+4. Regenerates `CHANGELOG.md`, commits both files to a `release/vX.Y.Z` branch, then opens a PR to `main` and merges it with a merge commit (the branch ruleset requires changes via pull request).
 
 ### Generating the Changelog
 

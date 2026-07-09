@@ -73,7 +73,7 @@ jobs:
           git add .claude-plugin/marketplace.json CHANGELOG.md
           git commit -m "Release v${VERSION}"
           git push origin "$BRANCH"
-          gh pr create --base main --head "$BRANCH" \
+          PR_URL=$(gh pr create --base main --head "$BRANCH" \
             --title "Release v${VERSION}" \
-            --body "Update the stable channel and changelog for release v${VERSION}."
-          gh pr merge "$BRANCH" --merge --delete-branch
+            --body "Update the stable channel and changelog for release v${VERSION}.")
+          gh pr merge "$PR_URL" --merge --delete-branch
