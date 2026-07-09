@@ -52,6 +52,26 @@ Don't forget to restart Claude Code or try reloading the plugins:
 |--------|-------------|
 | [smp-github](plugins/smp-github/) | GitHub skills — PR review feedback workflow |
 
+## Versioning and Releases
+
+This repo uses [GitVersion](https://gitversion.net) (see [GitVersion.yml](GitVersion.yml)) with mainline development: feature branches are merged to `main` and each merge bumps the minor version. To override the default bump, include `+semver: major`, `+semver: patch`, or `+semver: none` in the merge commit message.
+
+Note that plugin users only receive updates when the `version` in [plugins/smp-github/.claude-plugin/plugin.json](plugins/smp-github/.claude-plugin/plugin.json) changes, so bumping that field is what actually ships a release.
+
+The [Version workflow](.github/workflows/version.yml) prints the calculated version in its run summary for every push and pull request to `main`. To calculate it locally instead:
+
+```bash
+docker run --rm -v "$PWD:/repo" gittools/gitversion:6.3.0 /repo
+```
+
+### Releasing
+
+1. Check the next version calculated by the Version workflow (or run GitVersion locally).
+2. Update the `version` in `plugins/smp-github/.claude-plugin/plugin.json` to match and merge to `main`.
+3. Tag the release commit on `main`, e.g. `git tag v1.1.0 && git push origin v1.1.0`.
+4. Create a GitHub release from the tag.
+5. Regenerate the changelog (see below).
+
 ### Generating the Changelog
 
 Run the script to generate or update `CHANGELOG.md` from GitHub releases:
