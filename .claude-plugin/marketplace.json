@@ -8,7 +8,21 @@
   "plugins": [
     {
       "name": "smp-github",
-      "description": "Useful tools for interacting with GitHub.",
+      "description": "Useful tools for interacting with GitHub. Stable channel, updated on each release.",
+      "category": "development",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/saturdaymp/claude-plugins.git",
+        "path": "plugins/smp-github",
+        "ref": "main",
+        "sha": "19ae97d2b9f7bb7760a324ba4c3b53fbd937e850"
+      },
+      "version": "1.0.0",
+      "homepage": "https://github.com/saturdaymp/claude-plugins"
+    },
+    {
+      "name": "smp-github-latest",
+      "description": "Useful tools for interacting with GitHub. Latest channel, updated on every commit.",
       "category": "development",
       "source": "./plugins/smp-github",
       "homepage": "https://github.com/saturdaymp/claude-plugins"

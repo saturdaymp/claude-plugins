@@ -34,10 +34,16 @@ Load the local marketplace:
 
 ## Plugins
 
-Install plugins:
+Each plugin is published on two release channels:
+
+- **Stable** (e.g. `smp-github`): pinned to the most recent release tag, updated only when a release is published.
+- **Latest** (e.g. `smp-github-latest`): tracks the `main` branch, updated on every commit.
+
+Install the channel you want:
 
 ```
-/plugin install smp-github@saturdaymp/claude-plugins
+/plugin install smp-github@saturdaymp-claude-plugins
+/plugin install smp-github-latest@saturdaymp-claude-plugins
 ```
 
 Don't forget to restart Claude Code or try reloading the plugins:
@@ -48,9 +54,30 @@ Don't forget to restart Claude Code or try reloading the plugins:
 
 ### Plugins Available
 
-| Plugin | Description |
-|--------|-------------|
-| [smp-github](plugins/smp-github/) | GitHub skills — PR review feedback workflow |
+| Plugin | Channels | Description |
+|--------|----------|-------------|
+| [smp-github](plugins/smp-github/) | `smp-github`, `smp-github-latest` | GitHub skills — PR review feedback workflow |
+
+## Versioning and Releases
+
+This repo uses [GitVersion](https://gitversion.net) (see [GitVersion.yml](GitVersion.yml)): the next release version is one minor bump past the most recent release tag, no matter how many PRs have merged since. To bump differently, include `+semver: major` or `+semver: patch` in a commit message on `main`.
+
+Stable channel users only receive updates when the plugin's `version` and `ref` in [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json) change, which the Release workflow handles. Latest channel users receive updates on every commit to `main` because the latest entries omit `version`, so each commit SHA counts as a new version. For the same reason, plugin manifests (`plugin.json`) must not declare a `version` — it would take precedence over the marketplace entry and pin both channels to the same version.
+
+The [Version workflow](.github/workflows/version.yml) prints the calculated version in its run summary for every push and pull request to `main`. To calculate it locally instead:
+
+```bash
+docker run --rm -v "$PWD:/repo" gittools/gitversion:6.3.0 /repo
+```
+
+### Releasing
+
+Run the [Release workflow](.github/workflows/release.yml) from the GitHub Actions tab. It:
+
+1. Calculates the next version with GitVersion.
+2. Tags `main` with `vX.Y.Z` and creates a GitHub release with generated notes.
+3. Points the stable channel entries in `marketplace.json` at the new tag.
+4. Regenerates `CHANGELOG.md` and commits both files to `main` as `Release vX.Y.Z`.
 
 ### Generating the Changelog
 
