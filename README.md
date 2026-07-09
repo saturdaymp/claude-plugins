@@ -34,10 +34,16 @@ Load the local marketplace:
 
 ## Plugins
 
-Install plugins:
+Each plugin is published on two release channels:
+
+- **Stable** (e.g. `smp-github`): pinned to the most recent release tag, updated only when a release is published.
+- **Latest** (e.g. `smp-github-latest`): tracks the `main` branch, updated on every commit.
+
+Install the channel you want:
 
 ```
-/plugin install smp-github@saturdaymp/claude-plugins
+/plugin install smp-github@saturdaymp-claude-plugins
+/plugin install smp-github-latest@saturdaymp-claude-plugins
 ```
 
 Don't forget to restart Claude Code or try reloading the plugins:
@@ -56,7 +62,7 @@ Don't forget to restart Claude Code or try reloading the plugins:
 
 This repo uses [GitVersion](https://gitversion.net) (see [GitVersion.yml](GitVersion.yml)) with mainline development: feature branches are merged to `main` and each merge bumps the minor version. To override the default bump, include `+semver: major`, `+semver: patch`, or `+semver: none` in the merge commit message.
 
-Note that plugin users only receive updates when the `version` in [plugins/smp-github/.claude-plugin/plugin.json](plugins/smp-github/.claude-plugin/plugin.json) changes, so bumping that field is what actually ships a release.
+Stable channel users only receive updates when the plugin's `version` and `ref` in [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json) change, which the Release workflow handles. Latest channel users receive updates on every commit to `main` because the latest entries omit `version`, so each commit SHA counts as a new version. For the same reason, plugin manifests (`plugin.json`) must not declare a `version` — it would take precedence over the marketplace entry and pin both channels to the same version.
 
 The [Version workflow](.github/workflows/version.yml) prints the calculated version in its run summary for every push and pull request to `main`. To calculate it locally instead:
 
@@ -66,11 +72,12 @@ docker run --rm -v "$PWD:/repo" gittools/gitversion:6.3.0 /repo
 
 ### Releasing
 
-1. Check the next version calculated by the Version workflow (or run GitVersion locally).
-2. Update the `version` in `plugins/smp-github/.claude-plugin/plugin.json` to match and merge to `main`.
-3. Tag the release commit on `main`, e.g. `git tag v1.1.0 && git push origin v1.1.0`.
-4. Create a GitHub release from the tag.
-5. Regenerate the changelog (see below).
+Run the [Release workflow](.github/workflows/release.yml) from the GitHub Actions tab. It:
+
+1. Calculates the next version with GitVersion.
+2. Tags `main` with `vX.Y.Z` and creates a GitHub release with generated notes.
+3. Points the stable channel entries in `marketplace.json` at the new tag.
+4. Regenerates `CHANGELOG.md` and commits both files to `main` as `Release vX.Y.Z`.
 
 ### Generating the Changelog
 
