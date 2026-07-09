@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   release:
@@ -62,6 +63,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
+          BRANCH="release/v${VERSION}"
+          git checkout -b "$BRANCH"
           jq --arg version "$VERSION" \
             '(.plugins[] | select(.name == "smp-github")) |= (.source.ref = "v" + $version | del(.source.sha) | .version = $version)' \
             .claude-plugin/marketplace.json > marketplace.tmp
@@ -69,4 +72,8 @@ jobs:
           ./scripts/generate-changelog.sh
           git add .claude-plugin/marketplace.json CHANGELOG.md
           git commit -m "Release v${VERSION}"
-          git push origin HEAD:main
+          git push origin "$BRANCH"
+          PR_URL=$(gh pr create --base main --head "$BRANCH" \
+            --title "Release v${VERSION}" \
+            --body "Update the stable channel and changelog for release v${VERSION}.")
+          gh pr merge "$PR_URL" --merge --delete-branch
