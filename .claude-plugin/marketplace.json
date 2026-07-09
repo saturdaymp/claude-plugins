@@ -14,10 +14,9 @@
         "source": "git-subdir",
         "url": "https://github.com/saturdaymp/claude-plugins.git",
         "path": "plugins/smp-github",
-        "ref": "main",
-        "sha": "19ae97d2b9f7bb7760a324ba4c3b53fbd937e850"
+        "ref": "v1.1.1"
       },
-      "version": "1.0.0",
+      "version": "1.1.1",
       "homepage": "https://github.com/saturdaymp/claude-plugins"
     },
     {
