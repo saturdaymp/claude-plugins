@@ -29,4 +29,4 @@ jobs:
 
       - name: Show version
         run: |
-          echo "## Next version: ${{ steps.gitversion.outputs.semVer }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "## Next release: ${{ steps.gitversion.outputs.majorMinorPatch }} (${{ steps.gitversion.outputs.fullSemVer }})" >> "$GITHUB_STEP_SUMMARY"

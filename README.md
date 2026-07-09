@@ -60,7 +60,7 @@ Don't forget to restart Claude Code or try reloading the plugins:
 
 ## Versioning and Releases
 
-This repo uses [GitVersion](https://gitversion.net) (see [GitVersion.yml](GitVersion.yml)) with mainline development: feature branches are merged to `main` and each merge bumps the minor version. To override the default bump, include `+semver: major`, `+semver: patch`, or `+semver: none` in the merge commit message.
+This repo uses [GitVersion](https://gitversion.net) (see [GitVersion.yml](GitVersion.yml)): the next release version is one minor bump past the most recent release tag, no matter how many PRs have merged since. To bump differently, include `+semver: major` or `+semver: patch` in a commit message on `main`.
 
 Stable channel users only receive updates when the plugin's `version` and `ref` in [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json) change, which the Release workflow handles. Latest channel users receive updates on every commit to `main` because the latest entries omit `version`, so each commit SHA counts as a new version. For the same reason, plugin manifests (`plugin.json`) must not declare a `version` — it would take precedence over the marketplace entry and pin both channels to the same version.
 

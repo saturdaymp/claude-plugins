@@ -1,16 +1,8 @@
 workflow: GitHubFlow/v1
 
-# GitHubFlow/v1 defaults plus the Mainline strategy so every merge to
-# main increments the version without needing a tag on main.
-strategies:
-  - Fallback
-  - ConfiguredNextVersion
-  - MergeMessage
-  - TaggedCommit
-  - TrackReleaseBranches
-  - VersionInBranchName
-  - Mainline
-
+# GitHubFlow/v1 defaults: the next version is one increment past the most
+# recent release tag, regardless of how many PRs have merged since. The
+# Release workflow tags main, which anchors the next calculation.
 branches:
   main:
     increment: Minor
