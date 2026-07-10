@@ -1,6 +1,6 @@
 # GraphQL Queries for PR Review Thread Resolution
 
-**Important:** All queries below use inline values (placeholder tokens in UPPERCASE) instead of GraphQL variables. Do NOT use GraphQL variable declarations or `-f`/`-F` flags for substituting query variables (for example, `-f owner=... -F pr=...`) — instead, replace the placeholder tokens directly in the query string itself. It is still required to pass the query to `gh api graphql` via `-f query='...query text...'`.
+**Important:** All queries below use inline values (placeholder tokens in UPPERCASE) instead of GraphQL variables. Do NOT use GraphQL variable declarations (for example, `query($owner: String!)` or `mutation($threadId: ID!)`) or `-f`/`-F` flags for substituting query variables (for example, `-f owner=... -F pr=...`) — the `$` characters in variable declarations can be mangled by shell quoting, causing the API to reject the query with `Expected VAR_SIGN, actual: UNKNOWN_CHAR`. Instead, replace the placeholder tokens directly in the query string itself. It is still required to pass the query to `gh api graphql` via `-f query='...query text...'`.
 
 ## Fetch Review Thread Node IDs
 
