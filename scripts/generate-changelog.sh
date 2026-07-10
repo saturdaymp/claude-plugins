@@ -72,11 +72,20 @@ echo "Found $RELEASE_COUNT release(s) for $REPO"
   LINK_REFS=""
 
   while IFS= read -r TAG; do
-    # Fetch full release details using gh --jq (no external jq needed)
-    NAME=$(gh release view "$TAG" --repo "$REPO" --json name --jq '.name // empty')
-    BODY=$(gh release view "$TAG" --repo "$REPO" --json body --jq '.body // empty')
-    PUBLISHED=$(gh release view "$TAG" --repo "$REPO" --json publishedAt --jq '.publishedAt')
-    IS_PRERELEASE=$(gh release view "$TAG" --repo "$REPO" --json isPrerelease --jq '.isPrerelease')
+    # Fetch full release details in a single call using gh --jq (no external jq needed).
+    # The first line holds publishedAt and isPrerelease; the body (which may be
+    # multi-line) follows on the remaining lines.
+    RELEASE_DATA=$(gh release view "$TAG" --repo "$REPO" --json body,publishedAt,isPrerelease \
+      --jq '(.publishedAt // "") + " " + (.isPrerelease | tostring) + "\n" + (.body // "")')
+
+    META_LINE="${RELEASE_DATA%%$'\n'*}"
+    PUBLISHED="${META_LINE%% *}"
+    IS_PRERELEASE="${META_LINE##* }"
+    if [[ "$RELEASE_DATA" == *$'\n'* ]]; then
+      BODY="${RELEASE_DATA#*$'\n'}"
+    else
+      BODY=""
+    fi
 
     # Format the date as YYYY-MM-DD (publishedAt is ISO-8601, so the date is the first 10 characters)
     DATE="${PUBLISHED:0:10}"
