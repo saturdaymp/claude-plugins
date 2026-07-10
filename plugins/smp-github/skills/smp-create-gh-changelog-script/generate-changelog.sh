@@ -78,8 +78,8 @@ echo "Found $RELEASE_COUNT release(s) for $REPO"
     PUBLISHED=$(gh release view "$TAG" --repo "$REPO" --json publishedAt --jq '.publishedAt')
     IS_PRERELEASE=$(gh release view "$TAG" --repo "$REPO" --json isPrerelease --jq '.isPrerelease')
 
-    # Format the date as YYYY-MM-DD
-    DATE=$(date -jf "%Y-%m-%dT%H:%M:%SZ" "$PUBLISHED" "+%Y-%m-%d" 2>/dev/null || echo "$PUBLISHED" | cut -c1-10)
+    # Format the date as YYYY-MM-DD (publishedAt is ISO-8601, so the date is the first 10 characters)
+    DATE="${PUBLISHED:0:10}"
 
     # Strip leading 'v' for the display version
     VERSION="${TAG#v}"
