@@ -34,7 +34,7 @@ query {
 
 ### Subsequent pages
 
-If `pageInfo.hasNextPage` is `true`, re-run using this variant, replacing `END_CURSOR` with the `endCursor` value from the previous response. Repeat until the matching `databaseId` is found or all pages are exhausted.
+If `pageInfo.hasNextPage` is `true`, re-run using this variant, replacing `END_CURSOR` with the raw `endCursor` string from the previous response (do not include the JSON quotes — the query template already provides the surrounding quotes). Repeat until the matching `databaseId` is found or all pages are exhausted.
 
 ```graphql
 query {
