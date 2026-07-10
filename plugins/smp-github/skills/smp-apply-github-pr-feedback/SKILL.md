@@ -52,7 +52,7 @@ The user provided this PR review URL: $ARGUMENTS
    - Ask the user: "Would you like me to reply to the PR comment explaining why this feedback doesn't apply, and resolve the conversation?"
    - If the user agrees:
      - Draft a polite reply explaining why the feedback is not applicable. **STOP and show the draft to the user for confirmation before posting.**
-     - Post the reply using: `gh api repos/{owner}/{repo}/pulls/comments/{comment_id}/replies -f body="<reply>"`
+     - Post the reply using: `gh api repos/{owner}/{repo}/pulls/{pr_number}/comments/{root_comment_id}/replies -f body="<reply>"` (the reply endpoint requires the PR number in the path and the top-level comment ID from Phase 1 — omitting either returns a 404)
      - Resolve the conversation (see Phase 7).
    - **STOP here. Do not proceed to Phase 3.**
 
@@ -104,9 +104,9 @@ The user provided this PR review URL: $ARGUMENTS
 
 3. **STOP and show the draft reply to the user. Let them confirm or edit before posting.**
 
-4. Post the reply:
+4. Post the reply. The reply endpoint requires the PR number in the path, and the comment ID must be the top-level (root) comment ID from Phase 1 — omitting the PR number or replying to a non-root comment returns a 404:
    ```
-   gh api repos/{owner}/{repo}/pulls/comments/{comment_id}/replies -f body="<confirmed reply>"
+   gh api repos/{owner}/{repo}/pulls/{pr_number}/comments/{root_comment_id}/replies -f body="<confirmed reply>"
    ```
 
 ## Phase 7 - Resolve Conversation
