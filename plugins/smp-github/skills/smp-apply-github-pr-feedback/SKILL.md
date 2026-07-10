@@ -125,6 +125,7 @@ The user provided this PR review URL: $ARGUMENTS
 - If `gh api` calls fail (e.g., 404, 403), report the error clearly and ask how to proceed. Common causes: PR doesn't exist, insufficient permissions, or `gh` not authenticated.
 - If the PR is already merged or closed, inform the user and ask whether to continue (the fix may still be relevant for a follow-up).
 - If the review thread is already resolved, inform the user and skip Phase 7.
+- If a GraphQL call fails with `Expected VAR_SIGN, actual: UNKNOWN_CHAR`, the query used GraphQL variable declarations (e.g. `mutation($threadId: ID!)` with `-f threadId=...`), whose `$` characters were mangled by shell quoting. Do not retry the same command — rewrite the query with all values inlined directly in the query string, following the templates in `references/graphql-queries.md`.
 - Never retry failed API calls silently. Always report the error and ask the user for guidance.
 
 ## Important Notes
