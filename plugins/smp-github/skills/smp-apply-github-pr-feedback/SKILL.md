@@ -111,7 +111,7 @@ The user provided this PR review URL: $ARGUMENTS
 
 ## Phase 7 - Resolve Conversation
 
-1. Get the review thread node ID by running the fetch query from `references/graphql-queries.md`. Copy the query template exactly, replacing the placeholder values (OWNER, REPO, PR_NUMBER) with the actual values. Do NOT use GraphQL variables or `-f`/`-F` flags for variable substitution — all values must be inlined directly in the query string. Match the thread whose first comment has `databaseId` equal to the root comment ID from Phase 1.
+1. Get the review thread node ID by running the fetch query from `references/graphql-queries.md`. Copy the query template exactly, replacing the placeholder values (OWNER, REPO, PR_NUMBER) with the actual values. Do NOT use GraphQL variables or any additional `-f`/`-F` flags for variable substitution (owner, repo, PR number) — all values must be inlined directly in the query string. You may still use `-f query='...'` to pass the query to `gh api graphql`. Match the thread whose first comment has `databaseId` equal to the root comment ID from Phase 1.
 
 2. If `pageInfo.hasNextPage` is true, paginate using the subsequent pages query variant from the reference file, replacing END_CURSOR with the cursor value from the response.
 
